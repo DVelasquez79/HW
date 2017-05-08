@@ -27,13 +27,13 @@ public class CDLL
        }
        else 
        {
-        newNode.previous = list.previous;
-        newNode.next = list;
-        list.previous.next = newNode;
-        list.previous = newNode;
-        
-        head = list;
-        
+            newNode.previous = list.previous;
+            newNode.next = list;
+            list.previous.next = newNode;
+            list.previous = newNode;
+
+            head = list;
+
        }
        current = list;
        size++;
