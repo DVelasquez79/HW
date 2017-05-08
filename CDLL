@@ -1,0 +1,140 @@
+
+package datastructuresassign1;
+public class CDLL
+{
+    private Node head;
+    private Node list;
+    private Node current = null;
+    private int size = 0;
+    
+
+   
+    /* Insert creates a new node and puts in front of the current Node
+     * The new node inserted becomes the list's current Node
+     */
+   
+    public void insert(int data)
+    {
+       Node newNode = new Node();
+
+
+       if(size <= 0) 
+       {
+        list = newNode;
+        list.next = list;
+        list.previous = list;
+        head = list;
+       }
+       else 
+       {
+        newNode.previous = list.previous;
+        newNode.next = list;
+        list.previous.next = newNode;
+        list.previous = newNode;
+        
+        head = list;
+        
+       }
+       current = list;
+       size++;
+    }
+    /* Search starts from the current location and looks
+     * for the given data value. If the Node is found, it
+     * returns the Node. Otherwise, it returns null
+     */
+    public Node search(int data)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            if (current.data == data)
+                return current;
+            current = current.next;
+        }
+ 
+        return null;
+    }
+
+
+    /* Update searches for the given oldData value.
+     * If the Node is found, it changes the node value to
+     * newValue and returns true. Otherwise, it returns false
+     * If the node is found, that node also becomes
+     * the current Node
+     */
+    public boolean update(int replaced, int replacement)
+    {
+        final Node located = search(replaced);
+        if (located == null)
+            return false;
+ 
+        located.data = replacement;
+        return true;
+    }
+
+    /* Delete searches for the given data value.
+     * If the Node is found, it removes the node
+     * from the list and returns true. Otherwise, it
+     * returns false. If a node is removed, the
+     * next node becomes the current Node
+     */
+
+
+    public boolean delete(int data)
+    {
+        final Node located = search(data);
+        if (located == null)
+            return false;
+ 
+        if (size > 1)
+        {
+            located.previous.next = located.next;
+            located.next.previous = located.previous;
+            current = located.next;
+        }
+        else
+            current = null;
+        size--;
+ 
+ 
+        return true;
+    }
+
+    /* getCurrent returns the current Node in the list
+     * If the list is empty, it returns null
+     */
+    public Node getCurrent()
+    {
+        return current;
+    }
+ 
+
+    /* print displays all Nodes in order from the current
+     * node in the list using the next node pointers
+     * of each node
+     */
+    public void print()
+    {
+        System.out.print("{ ");
+        for (int i = 0; i < size; i++)
+        {
+            System.out.printf("%d%s ", current.data, i + 1 < size ? "," : "");
+            current = current.next;
+        }
+        System.out.println('}');
+    }
+
+    /* print displays all Nodes in order from the current
+     * node in the list using the previous node pointers
+     * of each node
+     */
+        public void printReverse()
+    {
+        System.out.print("{ ");
+        for (int i = 0; i < size; i++)
+        {
+            System.out.printf("%d%s ", current.data, i + 1 < size ? "," : "");
+            current = current.previous;
+        }
+        System.out.println('}');
+    }
+}
