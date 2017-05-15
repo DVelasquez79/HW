@@ -1,0 +1,292 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package datastructuresassign2;
+import java.util.Stack;
+/**
+ *
+ * @author Dion
+ */
+class Node //Node Class
+    {
+        public int data;
+        public Node left;
+        public Node right;
+        
+    }
+public class BinaryTree //Binary Tree Class
+{
+    int[]  ArrayOfNodes;
+    Node root;
+  
+    public void insert(int n) //Instert Function
+    {
+        Node current = root;
+        Node newNode = new Node();
+
+        newNode.data = n;
+        newNode.left = null;
+        newNode.right = null;
+
+        if (root == null)
+            root = newNode;
+        else
+            while (true)
+                if (newNode.data > current.data)
+                    if (current.right == null) 
+                    {
+                        current.right = newNode;
+                        break;
+                    }
+        else
+            current = current.right;
+        else
+        if (current.left == null) 
+        {
+            current.left = newNode;
+            break;
+        } else
+            current = current.left;
+    }
+    public Node search(int n) //Search Function
+    {
+        Node current = root;
+
+        while (current != null)
+            if (current.data == n)
+                return current;
+            else if (current.data > n)
+            current = current.left;
+        else
+            current = current.right;
+        return null;
+    }
+    public boolean update(int oldValue, int newValue) //Update Function
+    {
+        // search for oldValue
+        Node temp = search(oldValue);
+
+        if (temp == null) {
+            return false;
+        }
+        remove(oldValue); // if node is found, node.data=newValue, return True
+        insert(newValue);// current = node
+        return true;
+    }
+
+    public boolean remove(int n) //Delete Function
+    {
+        
+        // Check empty tree
+        if (root == null)
+            return false;
+
+        // Prepare search for node
+        Node current = root;
+        Node parent = root;
+        boolean currentIsLeft = true;
+
+        while (current.data != n) 
+        {
+            // currentIsLeft is true when current is finds n
+            // and is a “left” child of parent
+            parent = current;
+            if (current.data > n) 
+            {
+                currentIsLeft = true;
+                current = current.left;
+            } 
+            else 
+            {
+                currentIsLeft = false;
+                current = current.right;
+            }
+
+            // If current is null, node n was not found
+            if (current == null)
+                return false;
+        }
+        // At this point, current is the node to delete
+	// Now, we check for the situations
+
+	// Situation 1 - leaf node
+	if (current.left == null && current.right == null)
+
+		// Check if current node is root
+		if (parent == current)
+			root = null;
+
+		// Check which child pointer of parent to set
+		else if (currentIsLeft)
+			parent.left = null;
+		else
+			parent.right = null;
+        // Situation 2 - one child. Parent inherits child
+	// or if current is root, root takes child
+	else if (current.left == null)
+		if (parent == current)
+			root = current.right;
+		else if (currentIsLeft)
+			parent.left = current.right;
+		else
+			parent.right = current.right;
+	else if (current.right == null)
+		if (parent == current)
+			root = current.left;
+		else if (currentIsLeft)
+			parent.left = current.left;
+		else
+			parent.right = current.left;
+        // Situation 3: two children
+	else
+	{
+		Node successor = getSuccessor(current);
+
+		// Replace current node with successor
+		if (parent == current)
+			root = successor;
+		else if (currentIsLeft)
+			parent.left = successor;
+		else
+			parent.right = successor;
+
+		// Successor will always come from the right, so
+		// it must also take deleted node’s left child
+		successor.left = current.left;
+	}
+	return true;
+    }
+    private Node getSuccessor(Node removedNode) //Successor Function
+    {
+        // Prepare successor search by keeping track
+        // of parent and current
+        Node successorParent = removedNode;
+        Node successor = removedNode;
+        Node current = successor.right;
+
+        // Starting at the right child of the node to be
+        // removed, go down the subtree’s left children
+        // until there are no more children on the left
+        while (current != null)
+        {
+                successorParent = successor;
+                successor = current;
+                current = current.left;
+        }
+                // if the successor is somewhere down the subtree,
+        // the parent’s left child must take the
+        // the successor’s right child. Then, the
+        // successor’s right child takes the node
+        // to delete’s right child (because successor will
+        // be replacing it.
+        if (successor != removedNode.right)
+        {
+                successorParent.left = successor.right;
+                successor.right = removedNode.right;
+        }
+
+        // Note that if the successor is the immediate
+        // right child of the node to delete, we just 
+        // return that node (it has no left children and what
+        // ever is on successor’s right stays that way even
+        // after successor replaces the removed node.
+        return successor;
+    }
+
+    public void inOrder() //Display in Order Fucntion
+    {
+        displayInOrder(root);
+    }
+
+    void displayInOrder(Node current)
+    {
+        if (current != null)
+        {
+            displayInOrder(current.left);
+            System.out.println(current.data);
+            displayInOrder(current.right);
+        }
+    }
+    
+    public void preOrder() //Display PreOrder Function
+    {
+        displayPreOrder(root);
+    }
+    void displayPreOrder(Node current)
+    {
+        if (current != null)
+        {
+            System.out.println(current.data);
+            displayPreOrder(current.left);
+            displayPreOrder(current.right);
+        }
+    }
+    /* Given a non-empty binary search tree,  
+     return the minimum data value found in that 
+     tree. Note the entire tree does not need 
+     to be searched. */
+    int findMin(Node node) 
+    {
+      Node current = root;
+
+	// loop the left branch until the minimum data is found
+	while (current.left != null) {
+		current = current.left;
+	}
+	return current.data;
+    }
+    
+    /*double calculateAverage()
+    {
+        // clear the ArrayOfNodes first
+	// activate the adding recusion function
+	// at the same time keep count # of nodes
+	int[]  ArrayOfNodes;
+	addRecusive(Node root);
+	//return SumOfAllNodes / NumberOfNodes;
+	return this.getSumOfAllNodes() / this.getNumberOfNodes();
+    }
+    
+    void addRecursive(Node current)
+    {
+	if (node != null) {
+		// recusion of adding all data 
+		// also keep track of nodes into global array ArrayOfNodes 
+		// for calculating average & later usage
+		addRecusive(current.left);
+		addRecusive(current.right);
+		ArrayOfNodes[ArrayOfNodes.length] = node.data;
+	}
+    }*/
+    /*public boolean isEmpty() 
+    { 
+        return null == root; 
+    }
+    int getNumberOfNodes() 
+    { 
+        Node current = root; 
+        int size = 0; 
+        Stack<Node> stack = new 
+        Stack<Node>(); 
+        while (!stack.isEmpty() || current != null) 
+        { 
+            if (current != null) 
+            { 
+                stack.push(current); 
+                current = current.left; 
+            } 
+            else 
+            { 
+                size++; current = stack.pop(); 
+                current = current.right; 
+            } 
+        } 
+        return size; 
+    }*/
+
+}
+
+
+
