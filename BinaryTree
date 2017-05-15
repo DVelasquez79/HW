@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package datastructuresassign2;
-import java.util.Stack;
 /**
  *
  * @author Dion
@@ -14,13 +13,13 @@ class Node //Node Class
         public int data;
         public Node left;
         public Node right;
-        
     }
 public class BinaryTree //Binary Tree Class
 {
     int[]  ArrayOfNodes;
     Node root;
-  
+    
+    
     public void insert(int n) //Instert Function
     {
         Node current = root;
@@ -50,7 +49,7 @@ public class BinaryTree //Binary Tree Class
         } else
             current = current.left;
     }
-    public Node search(int n) //Search Function
+    Node search(int n) //Search Function
     {
         Node current = root;
 
@@ -223,69 +222,44 @@ public class BinaryTree //Binary Tree Class
             displayPreOrder(current.right);
         }
     }
-    /* Given a non-empty binary search tree,  
-     return the minimum data value found in that 
-     tree. Note the entire tree does not need 
-     to be searched. */
-    int findMin(Node node) 
+    Node findMin() // returns node with minimum key value HELP
     {
-      Node current = root;
-
-	// loop the left branch until the minimum data is found
-	while (current.left != null) {
-		current = current.left;
-	}
-	return current.data;
+        Node current= new Node();
+        Node last = new Node();
+        current = root; // start at root
+        while(current != null) // until the bottom,
+        {
+            last = current; // remember node
+            current = current.left; // go to left child
+        }
+        return last;
     }
     
-    /*double calculateAverage()
+    int getNumberOfNodes()//HELP
     {
-        // clear the ArrayOfNodes first
-	// activate the adding recusion function
-	// at the same time keep count # of nodes
-	int[]  ArrayOfNodes;
-	addRecusive(Node root);
-	//return SumOfAllNodes / NumberOfNodes;
-	return this.getSumOfAllNodes() / this.getNumberOfNodes();
+        return ArrayOfNodes.length;
     }
-    
-    void addRecursive(Node current)
-    {
-	if (node != null) {
-		// recusion of adding all data 
-		// also keep track of nodes into global array ArrayOfNodes 
-		// for calculating average & later usage
-		addRecusive(current.left);
-		addRecusive(current.right);
-		ArrayOfNodes[ArrayOfNodes.length] = node.data;
-	}
-    }*/
-    /*public boolean isEmpty() 
-    { 
-        return null == root; 
-    }
-    int getNumberOfNodes() 
-    { 
-        Node current = root; 
-        int size = 0; 
-        Stack<Node> stack = new 
-        Stack<Node>(); 
-        while (!stack.isEmpty() || current != null) 
-        { 
-            if (current != null) 
-            { 
-                stack.push(current); 
-                current = current.left; 
-            } 
-            else 
-            { 
-                size++; current = stack.pop(); 
-                current = current.right; 
-            } 
-        } 
-        return size; 
-    }*/
 
+/*NEED HELP
+int findMin()
+-	If the tree is empty, return -1
+-	Otherwise, return the smallest value node in the tree
+    
+double calculateAverage()
+-	If the tree is empty, return 0.0
+-	Otherwise, return the average value of the tree by adding all node values and dividing by the number of nodes in the tree
+
+int getNumberOfNodes()
+-	Returns the number of nodes in the tree
+
+boolean isBalanced()
+-	If the tree is empty, return false
+-	Otherwise, return true if the tree is balanced
+-	A balanced is tree is defined as follows:
+o	If both of its subtrees are balanced
+o	The height of its left subtree differs from the height of its right subtree by at most 1
+-	Hint: you may want a getHeight function and think of this entire solution recursively…
+*/
 }
 
 
